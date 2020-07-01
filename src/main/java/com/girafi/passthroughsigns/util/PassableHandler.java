@@ -10,11 +10,12 @@ import net.minecraft.entity.item.PaintingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateHolder;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -35,14 +36,13 @@ public class PassableHandler {
         BlockState state = world.getBlockState(pos);
         PlayerEntity player = event.getPlayer();
         Block block = state.getBlock();
-
         if (block instanceof WallSignBlock && GENERAL.shouldWallSignBePassable.get() || block instanceof WallBannerBlock && GENERAL.shouldBannerBePassable.get() ||
                 block instanceof IPassable && ((IPassable) block).canBePassed(world, pos, IPassable.EnumPassableType.WALL_BLOCK) ||
                 PassthroughSignsAPI.BLOCK_PASSABLES.contains(block)) {
             Direction facingOpposite = Direction.NORTH.getOpposite();
-            if (state.has(DirectionalBlock.FACING)) {
+            if (state.func_235901_b_(DirectionalBlock.FACING)) {
                 facingOpposite = state.get(DirectionalBlock.FACING).getOpposite();
-            } else if (state.has(HorizontalBlock.HORIZONTAL_FACING)) {
+            } else if (state.func_235901_b_(HorizontalBlock.HORIZONTAL_FACING)) {
                 facingOpposite = state.get(HorizontalBlock.HORIZONTAL_FACING).getOpposite();
             }
 
@@ -90,7 +90,7 @@ public class PassableHandler {
             BlockState attachedState = world.getBlockState(posOffset);
 
             BlockState stateDown = world.getBlockState(pos.down());
-            BlockRayTraceResult rayTrace = new BlockRayTraceResult(new Vec3d(posOffset.getX(), posOffset.getY(), posOffset.getZ()), facingOpposite, pos, false);
+            BlockRayTraceResult rayTrace = new BlockRayTraceResult(new Vector3d(posOffset.getX(), posOffset.getY(), posOffset.getZ()), facingOpposite, pos, false);
             if (!world.isAirBlock(pos.down()) && attachedState.getBlock().isAir(attachedState, world, pos)) {
                 stateDown.getBlock().onBlockActivated(attachedState, world, pos.down(), player, hand, rayTrace);
             } else if (!attachedState.getBlock().isAir(attachedState, world, pos)) {
