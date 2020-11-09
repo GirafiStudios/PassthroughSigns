@@ -67,7 +67,7 @@ public class PassableHandler {
             Direction facingOpposite = entity.getHorizontalFacing().getOpposite();
 
             if (!player.isCrouching()) {
-                if (entity instanceof ItemFrameEntity && GENERAL.turnOffItemRotation.get()) {
+                if (entity instanceof ItemFrameEntity && GENERAL.turnOffItemRotation.get() && world.getBlockState(pos.offset(facingOpposite)).hasTileEntity()) {
                     event.setCanceled(true);
                 }
                 rightClick(world, pos, player, event.getHand(), facingOpposite);
