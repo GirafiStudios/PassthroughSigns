@@ -3,17 +3,18 @@ package com.girafi.passthroughsigns.util;
 import com.girafi.passthroughsigns.PassthroughSigns;
 import com.girafi.passthroughsigns.api.IPassable;
 import com.girafi.passthroughsigns.api.PassthroughSignsAPI;
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.entity.item.PaintingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.decoration.Painting;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -27,65 +28,65 @@ public class PassableHandler {
 
     @SubscribeEvent
     public static void onPlayerInteract(PlayerInteractEvent.RightClickBlock event) {
-        World world = event.getWorld();
+        Level level = event.getWorld();
         BlockPos pos = event.getPos();
-        BlockState state = world.getBlockState(pos);
-        PlayerEntity player = event.getPlayer();
+        BlockState state = level.getBlockState(pos);
+        Player player = event.getPlayer();
         Block block = state.getBlock();
         if (block instanceof WallSignBlock && GENERAL.shouldWallSignBePassable.get() || block instanceof WallBannerBlock && GENERAL.shouldBannerBePassable.get() ||
-                block instanceof IPassable && ((IPassable) block).canBePassed(world, pos, IPassable.EnumPassableType.WALL_BLOCK) ||
+                block instanceof IPassable && ((IPassable) block).canBePassed(level, pos, IPassable.EnumPassableType.WALL_BLOCK) ||
                 PassthroughSignsAPI.BLOCK_PASSABLES.contains(block)) {
             Direction facingOpposite = Direction.NORTH.getOpposite();
             if (state.hasProperty(DirectionalBlock.FACING)) {
-                facingOpposite = state.get(DirectionalBlock.FACING).getOpposite();
-            } else if (state.hasProperty(HorizontalBlock.HORIZONTAL_FACING)) {
-                facingOpposite = state.get(HorizontalBlock.HORIZONTAL_FACING).getOpposite();
+                facingOpposite = state.getValue(DirectionalBlock.FACING).getOpposite();
+            } else if (state.hasProperty(HorizontalDirectionalBlock.FACING)) {
+                facingOpposite = state.getValue(HorizontalDirectionalBlock.FACING).getOpposite();
             }
 
             if (block instanceof WallSignBlock) {
                 if (IS_QUARK_LOADED && player.isCrouching() && GENERAL.shiftClickQuark.get()) {
-                    rightClick(world, pos, player, event.getHand(), facingOpposite);
+                    rightClick(level, pos, player, event.getHand(), facingOpposite);
                 } else if (!IS_QUARK_LOADED) {
-                    rightClick(world, pos, player, event.getHand(), facingOpposite);
+                    rightClick(level, pos, player, event.getHand(), facingOpposite);
                 }
             } else if (!player.isCrouching()) {
-                rightClick(world, pos, player, event.getHand(), facingOpposite);
+                rightClick(level, pos, player, event.getHand(), facingOpposite);
             }
         }
     }
 
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        World world = event.getWorld();
+        Level level = event.getWorld();
         BlockPos pos = event.getPos();
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         Entity entity = event.getTarget();
 
-        if (entity instanceof ItemFrameEntity && GENERAL.shouldItemFrameBePassable.get() || entity instanceof PaintingEntity && GENERAL.shouldPaintingsBePassable.get() ||
-                entity instanceof IPassable && ((IPassable) entity).canBePassed(world, pos, IPassable.EnumPassableType.HANGING_ENTITY) ||
+        if (entity instanceof ItemFrame && GENERAL.shouldItemFrameBePassable.get() || entity instanceof Painting && GENERAL.shouldPaintingsBePassable.get() ||
+                entity instanceof IPassable && ((IPassable) entity).canBePassed(level, pos, IPassable.EnumPassableType.HANGING_ENTITY) ||
                 PassthroughSignsAPI.ENTITY_PASSABLES.contains(entity.getType())) {
-            Direction facingOpposite = entity.getHorizontalFacing().getOpposite();
+            Direction facingOpposite = entity.getDirection().getOpposite();
 
             if (!player.isCrouching()) {
-                if (entity instanceof ItemFrameEntity && GENERAL.turnOffItemRotation.get() && world.getBlockState(pos.offset(facingOpposite)).hasTileEntity()) {
+                if (entity instanceof ItemFrame && GENERAL.turnOffItemRotation.get() && level.getBlockState(pos.relative(facingOpposite)).hasBlockEntity()) {
                     event.setCanceled(true);
                 }
-                rightClick(world, pos, player, event.getHand(), facingOpposite);
+                rightClick(level, pos, player, event.getHand(), facingOpposite);
             }
         }
     }
 
-    private static void rightClick(World world, BlockPos pos, PlayerEntity player, Hand hand, Direction facingOpposite) {
-        if (hand == Hand.MAIN_HAND) {
-            BlockPos posOffset = pos.add(facingOpposite.getXOffset(), facingOpposite.getYOffset(), facingOpposite.getZOffset());
-            BlockState attachedState = world.getBlockState(posOffset);
+    private static void rightClick(Level level, BlockPos pos, Player player, InteractionHand hand, Direction facingOpposite) {
+        if (hand == InteractionHand.MAIN_HAND) {
+            BlockPos posOffset = pos.offset(facingOpposite.getStepX(), facingOpposite.getStepY(), facingOpposite.getStepZ());
+            BlockState attachedState = level.getBlockState(posOffset);
 
-            BlockState stateDown = world.getBlockState(pos.down());
-            BlockRayTraceResult rayTrace = new BlockRayTraceResult(new Vector3d(posOffset.getX(), posOffset.getY(), posOffset.getZ()), facingOpposite, pos, false);
-            if (!world.isAirBlock(pos.down()) && attachedState.getBlock().isAir(attachedState, world, pos)) {
-                stateDown.getBlock().onBlockActivated(attachedState, world, pos.down(), player, hand, rayTrace);
-            } else if (!attachedState.getBlock().isAir(attachedState, world, pos)) {
-                attachedState.getBlock().onBlockActivated(attachedState, world, posOffset, player, hand, rayTrace);
+            BlockState stateDown = level.getBlockState(pos.below());
+            BlockHitResult rayTrace = new BlockHitResult(new Vec3(posOffset.getX(), posOffset.getY(), posOffset.getZ()), facingOpposite, pos, false);
+            if (!level.isEmptyBlock(pos.below()) && attachedState.isAir()) {
+                stateDown.getBlock().use(stateDown, level, pos.below(), player, hand, rayTrace);
+            } else if (!attachedState.isAir()) {
+                attachedState.getBlock().use(attachedState, level, posOffset, player, hand, rayTrace);
             }
         }
     }

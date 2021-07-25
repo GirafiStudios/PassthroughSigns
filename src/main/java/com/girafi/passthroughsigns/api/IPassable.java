@@ -1,19 +1,19 @@
 package com.girafi.passthroughsigns.api;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public interface IPassable {
 
     /**
      * Return true if this block/entity should be passable.
      *
-     * @param world the world
+     * @param level the level
      * @param pos   the position of the block/entity
      * @param type  the EnumPassableType for the block/entity
      * @return whether the block/entity can be passed or not
      */
-    boolean canBePassed(World world, BlockPos pos, EnumPassableType type);
+    boolean canBePassed(Level level, BlockPos pos, EnumPassableType type);
 
     enum EnumPassableType {
 
