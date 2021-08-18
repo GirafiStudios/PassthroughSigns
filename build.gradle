@@ -45,7 +45,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Implementation-Version": "${version}"
+            "Implementation-Version": project.version
         ])
     }
 }
