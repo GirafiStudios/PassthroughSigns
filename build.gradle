@@ -1,14 +1,7 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: false
-    }
+plugins {
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1+'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'maven-publish'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -84,4 +77,8 @@ publishing {
             mavenLocal()
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
