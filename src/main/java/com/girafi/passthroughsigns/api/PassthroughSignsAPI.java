@@ -21,8 +21,8 @@ public class PassthroughSignsAPI {
      */
     public static void setCanBePassed(String string) {
         ResourceLocation resourceLocation = new ResourceLocation(string);
-        if (ForgeRegistries.ENTITIES.containsKey(resourceLocation)) {
-            ENTITY_PASSABLES.add(ForgeRegistries.ENTITIES.getValue(resourceLocation));
+        if (ForgeRegistries.ENTITY_TYPES.containsKey(resourceLocation)) {
+            ENTITY_PASSABLES.add(ForgeRegistries.ENTITY_TYPES.getValue(resourceLocation));
         } else if (ForgeRegistries.BLOCKS.containsKey(resourceLocation)) {
             BLOCK_PASSABLES.add(ForgeRegistries.BLOCKS.getValue(resourceLocation));
         }

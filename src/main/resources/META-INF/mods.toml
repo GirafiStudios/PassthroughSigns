@@ -15,6 +15,6 @@ license="All rights reserved"
 [[dependencies.passthroughsigns]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[41.0.94,)"
     ordering="AFTER"
     side="BOTH"
