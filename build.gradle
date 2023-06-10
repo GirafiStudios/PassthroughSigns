@@ -1,6 +1,7 @@
 plugins {
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1+'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -12,19 +13,35 @@ if (System.getenv().BUILD_NUMBER) {
 
 version = "${minecraft_version}-${mod_version}${buildnumber}"
 group = "com.girafi.passthroughsigns"
-archivesBaseName = "PassthroughSigns"
+
+base {
+    archivesName = "PassthroughSigns"
+}
 
 minecraft {
     mappings channel: 'official', version: project.minecraft_version
+	enableIdeaPrepareRuns = true
+	copyIdeResources = true
+	generateRunFolders = true
 
     runs {
-        client = {
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+        client {
+            workingDirectory project.file('run')
+			
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
         }
-        server = {
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+        server {
+            workingDirectory project.file('run')
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
@@ -35,24 +52,33 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 }
 
-jar {
-    manifest {
-        attributes([
-            "Implementation-Version": project.version
-        ])
+def resourceTargets = ['META-INF/mods.toml']
+def replaceProperties = [
+        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+        forge_version: forge_version, forge_version_range: forge_version_range,
+        loader_version_range: loader_version_range,
+        mod_version: mod_version,
+]
+
+processResources {
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
     }
 }
 
 task sourcesJar(type: Jar) {
 	from sourceSets.main.allJava
-	classifier = 'sources'
+	archiveClassifier = 'sources'
 }
 
 task apiJar(type: Jar) {
 	from sourceSets.main.allSource
 	from sourceSets.main.output
     include 'com/girafi/passthroughsigns/api/**/*'
-    classifier = 'api'
+    archiveClassifier = 'api'
 }
 
 artifacts {
