@@ -44,10 +44,9 @@ public class PassableHandler {
             }
 
             if (block instanceof WallSignBlock) {
-                if (IS_QUARK_LOADED && player.isCrouching() && GENERAL.shiftClickQuark.get()) {
+                if (!player.isCrouching()) {
                     rightClick(level, pos, player, event.getHand(), facingOpposite);
-                } else if (!IS_QUARK_LOADED) {
-                    rightClick(level, pos, player, event.getHand(), facingOpposite);
+                    event.setCanceled(true);
                 }
             } else if (!player.isCrouching()) {
                 rightClick(level, pos, player, event.getHand(), facingOpposite);

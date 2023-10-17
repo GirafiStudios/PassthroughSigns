@@ -12,7 +12,6 @@ public class ConfigurationHandler {
         public ForgeConfigSpec.BooleanValue shouldItemFrameBePassable;
         public ForgeConfigSpec.BooleanValue shouldPaintingsBePassable;
         public ForgeConfigSpec.BooleanValue turnOffItemRotation;
-        public ForgeConfigSpec.BooleanValue shiftClickQuark;
 
         General(ForgeConfigSpec.Builder builder) {
             builder.push("general");
@@ -36,10 +35,6 @@ public class ConfigurationHandler {
                     .comment("Disable default behaviour of item frames rotation display, when not sneaking (Recommended when ignoring item frames is enabled)")
                     .translation("passthroughsigns.configgui.turnOffItemRotation")
                     .define("Turn off item rotation", false);
-            shiftClickQuark = builder
-                    .comment("Whether shift-click is required to ignore signs, when Quark is installed.")
-                    .translation("passthroughsigns.configgui.shiftClickQuark")
-                    .define("Shift-click to ignore signs (Quark)", true);
             builder.pop();
         }
     }
