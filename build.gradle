@@ -3,11 +3,15 @@ plugins {
     id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
 }
 
+ext.buildnumber=""
+if (System.getenv().BUILD_NUMBER) {
+    ext.buildnumber = ".B" + System.getenv().BUILD_NUMBER
+}
+
 subprojects {
     apply plugin: 'java'
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
-    java.withJavadocJar()
         
     jar {
         from(rootProject.file("LICENSE")) {
@@ -54,7 +58,7 @@ subprojects {
 
     processResources {
         def expandProps = [
-                "version": version,
+                "version": version + buildnumber,
                 "group": project.group, //Else we target the task's group.
                 "minecraft_version": minecraft_version,
                 "forge_version": forge_version,
