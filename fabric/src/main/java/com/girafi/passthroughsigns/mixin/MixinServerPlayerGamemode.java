@@ -17,20 +17,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerGameMode.class)
 public class MixinServerPlayerGamemode {
     
-    @Inject(at = @At("HEAD"), method = "useItemOn(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;")
-    private InteractionResult useItemOn(ServerPlayer serverPlayer, Level level, ItemStack stack, InteractionHand hand, BlockHitResult blockHitResult, CallbackInfo info) {
+    @Inject(at = @At("HEAD"), cancellable = true, method = "useItemOn(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;")
+    private void useItemOn(ServerPlayer serverPlayer, Level level, ItemStack stack, InteractionHand hand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> info) {
         BlockPos pos = blockHitResult.getBlockPos();
         BlockState state = level.getBlockState(pos);
 
         PassableHandler.onPlayerInteract(level, pos, state, serverPlayer, hand, info);
-
-        Constants.LOG.info("This line is printed by an example mod mixin from Fabric!");
-        Constants.LOG.info("MC Version: {}", Minecraft.getInstance().getVersionType());
-
-        return InteractionResult.PASS;
     }
 }
