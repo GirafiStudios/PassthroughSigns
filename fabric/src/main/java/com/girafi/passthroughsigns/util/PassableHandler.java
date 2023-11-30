@@ -12,14 +12,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static com.girafi.passthroughsigns.util.ConfigurationHandler.*;
 
 public class PassableHandler {
 
     public static void onPlayerInteract(Level level, BlockPos pos, BlockState state, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> callbackInfo) {
         Block block = state.getBlock();
-        if (block instanceof WallSignBlock /*&& GENERAL.shouldWallSignBePassable.get()*/ || block instanceof WallBannerBlock /*&& GENERAL.shouldBannerBePassable.get()*/ ||
+        if (block instanceof WallSignBlock && GENERAL.shouldWallSignBePassable.get() || block instanceof WallBannerBlock && GENERAL.shouldBannerBePassable.get() ||
                 block instanceof IPassable && ((IPassable) block).canBePassed(level, pos, IPassable.EnumPassableType.WALL_BLOCK)) {
             Direction facingOpposite = Direction.NORTH.getOpposite();
             if (state.hasProperty(DirectionalBlock.FACING)) {
@@ -41,12 +42,12 @@ public class PassableHandler {
     }
 
     public static void onEntityInteract(Level level, BlockPos pos, Player player, Entity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> callbackInfo) {
-        if (entity instanceof ItemFrame /*&& GENERAL.shouldItemFrameBePassable.get()*/ || entity instanceof Painting /*&& GENERAL.shouldPaintingsBePassable.get()*/ ||
+        if (entity instanceof ItemFrame && GENERAL.shouldItemFrameBePassable.get() || entity instanceof Painting && GENERAL.shouldPaintingsBePassable.get() ||
                 entity instanceof IPassable && ((IPassable) entity).canBePassed(level, pos, IPassable.EnumPassableType.HANGING_ENTITY)) {
             Direction facingOpposite = entity.getDirection().getOpposite();
 
             if (!player.isCrouching()) {
-                if (entity instanceof ItemFrame /*&& GENERAL.turnOffItemRotation.get()*/ && level.getBlockState(pos.relative(facingOpposite)).hasBlockEntity()) {
+                if (entity instanceof ItemFrame && GENERAL.turnOffItemRotation.get() && level.getBlockState(pos.relative(facingOpposite)).hasBlockEntity()) {
                     callbackInfo.setReturnValue(InteractionResult.FAIL);
                 }
                 PassableHelper.rightClick(level, pos, player, hand, facingOpposite);
