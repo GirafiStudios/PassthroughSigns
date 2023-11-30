@@ -44,11 +44,11 @@ public class PassableHandler {
 
             if (block instanceof WallSignBlock) {
                 if (!player.isCrouching()) {
-                    rightClick(level, pos, player, event.getHand(), facingOpposite);
+                    PassableHelper.rightClick(level, pos, player, event.getHand(), facingOpposite);
                     event.setCanceled(true);
                 }
             } else if (!player.isCrouching()) {
-                rightClick(level, pos, player, event.getHand(), facingOpposite);
+                PassableHelper.rightClick(level, pos, player, event.getHand(), facingOpposite);
             }
         }
     }
@@ -69,22 +69,7 @@ public class PassableHandler {
                 if (entity instanceof ItemFrame && GENERAL.turnOffItemRotation.get() && level.getBlockState(pos.relative(facingOpposite)).hasBlockEntity()) {
                     event.setCanceled(true);
                 }
-                rightClick(level, pos, player, event.getHand(), facingOpposite);
-            }
-        }
-    }
-
-    private static void rightClick(Level level, BlockPos pos, Player player, InteractionHand hand, Direction facingOpposite) {
-        if (hand == InteractionHand.MAIN_HAND) {
-            BlockPos posOffset = pos.offset(facingOpposite.getStepX(), facingOpposite.getStepY(), facingOpposite.getStepZ());
-            BlockState attachedState = level.getBlockState(posOffset);
-
-            BlockState stateDown = level.getBlockState(pos.below());
-            BlockHitResult rayTrace = new BlockHitResult(new Vec3(posOffset.getX(), posOffset.getY(), posOffset.getZ()), facingOpposite, pos, false);
-            if (!level.isEmptyBlock(pos.below()) && attachedState.isAir()) {
-                stateDown.getBlock().use(stateDown, level, pos.below(), player, hand, rayTrace);
-            } else if (!attachedState.isAir()) {
-                attachedState.getBlock().use(attachedState, level, posOffset, player, hand, rayTrace);
+                PassableHelper.rightClick(level, pos, player, event.getHand(), facingOpposite);
             }
         }
     }
