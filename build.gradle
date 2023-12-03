@@ -21,7 +21,7 @@ subprojects {
             attributes([
                 'Specification-Title'     : mod_name,
                 'Specification-Vendor'    : mod_author,
-                'Specification-Version'   : project.jar.archiveVersion + buildnumber,
+                'Specification-Version'   : project.jar.archiveVersion + ${buildnumber},
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : mod_author,
