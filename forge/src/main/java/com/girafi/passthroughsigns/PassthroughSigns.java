@@ -18,6 +18,6 @@ public class PassthroughSigns {
     }
 
     public void handleIMCMessages(InterModProcessEvent event) {
-        event.getIMCStream("registerPassable"::equals).forEach(m -> PassthroughSignsAPI.setCanBePassed(m.getMethod()));
+        event.getIMCStream("registerPassable"::equals).forEach(m -> PassthroughSignsAPI.setCanBePassed(m.method()));
     }
 }

@@ -1,20 +1,20 @@
 package com.girafi.passthroughsigns.util;
 
 
-import net.neoforged.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ConfigurationHandler {
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final General GENERAL = new General(BUILDER);
 
     public static class General {
-        public ForgeConfigSpec.BooleanValue shouldWallSignBePassable;
-        public ForgeConfigSpec.BooleanValue shouldBannerBePassable;
-        public ForgeConfigSpec.BooleanValue shouldItemFrameBePassable;
-        public ForgeConfigSpec.BooleanValue shouldPaintingsBePassable;
-        public ForgeConfigSpec.BooleanValue turnOffItemRotation;
+        public ModConfigSpec.BooleanValue shouldWallSignBePassable;
+        public ModConfigSpec.BooleanValue shouldBannerBePassable;
+        public ModConfigSpec.BooleanValue shouldItemFrameBePassable;
+        public ModConfigSpec.BooleanValue shouldPaintingsBePassable;
+        public ModConfigSpec.BooleanValue turnOffItemRotation;
 
-        General(ForgeConfigSpec.Builder builder) {
+        General(ModConfigSpec.Builder builder) {
             builder.push("general");
             shouldWallSignBePassable = builder
                     .comment("Whether to ignore wall signs when attached to an interactable block or not.")
@@ -40,5 +40,5 @@ public class ConfigurationHandler {
         }
     }
 
-    public static final ForgeConfigSpec spec = BUILDER.build();
+    public static final ModConfigSpec spec = BUILDER.build();
 }

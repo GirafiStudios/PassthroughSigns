@@ -1,6 +1,7 @@
 package com.girafi.passthroughsigns.util;
 
 import com.girafi.passthroughsigns.api.IPassable;
+import com.girafi.passthroughsigns.api.PassthroughSignsAPI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -21,7 +22,8 @@ public class PassableHandler {
     public static void onPlayerInteract(Level level, BlockPos pos, BlockState state, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> callbackInfo) {
         Block block = state.getBlock();
         if (block instanceof WallSignBlock && GENERAL.shouldWallSignBePassable.get() || block instanceof WallBannerBlock && GENERAL.shouldBannerBePassable.get() ||
-                block instanceof IPassable && ((IPassable) block).canBePassed(level, pos, IPassable.EnumPassableType.WALL_BLOCK)) {
+                block instanceof IPassable && ((IPassable) block).canBePassed(level, pos, IPassable.EnumPassableType.WALL_BLOCK) ||
+                PassthroughSignsAPI.BLOCK_PASSABLES.contains(block)) {
             Direction facingOpposite = Direction.NORTH.getOpposite();
             if (state.hasProperty(DirectionalBlock.FACING)) {
                 facingOpposite = state.getValue(DirectionalBlock.FACING).getOpposite();
@@ -43,7 +45,8 @@ public class PassableHandler {
 
     public static void onEntityInteract(Level level, BlockPos pos, Player player, Entity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> callbackInfo) {
         if (entity instanceof ItemFrame && GENERAL.shouldItemFrameBePassable.get() || entity instanceof Painting && GENERAL.shouldPaintingsBePassable.get() ||
-                entity instanceof IPassable && ((IPassable) entity).canBePassed(level, pos, IPassable.EnumPassableType.HANGING_ENTITY)) {
+                entity instanceof IPassable && ((IPassable) entity).canBePassed(level, pos, IPassable.EnumPassableType.HANGING_ENTITY) ||
+                PassthroughSignsAPI.ENTITY_PASSABLES.contains(entity.getType())) {
             Direction facingOpposite = entity.getDirection().getOpposite();
 
             if (!player.isCrouching()) {
