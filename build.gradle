@@ -8,8 +8,6 @@ if (System.getenv().BUILD_NUMBER) {
     ext.buildnumber = ".B" + System.getenv().BUILD_NUMBER
 }
 
-version = "project.version${buildnumber}"
-
 subprojects {
     apply plugin: 'java'
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
