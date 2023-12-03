@@ -8,6 +8,8 @@ if (System.getenv().BUILD_NUMBER) {
     ext.buildnumber = ".B" + System.getenv().BUILD_NUMBER
 }
 
+version = "project.version${buildnumber}"
+
 subprojects {
     apply plugin: 'java'
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -21,9 +23,9 @@ subprojects {
             attributes([
                 'Specification-Title'     : mod_name,
                 'Specification-Vendor'    : mod_author,
-                'Specification-Version'   : "project.jar.archiveVersion${buildnumber}",
+                'Specification-Version'   : project.jar.archiveVersion,
                 'Implementation-Title'    : project.name,
-                'Implementation-Version'  : "project.jar.archiveVersion${buildnumber}",
+                'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : mod_author,
                 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 'Timestamp'               : System.currentTimeMillis(),
@@ -62,7 +64,7 @@ subprojects {
 
     processResources {
         def expandProps = [
-                "version": "version${buildnumber}",
+                "version": version,
                 "group": project.group, //Else we target the task's group.
                 "minecraft_version": minecraft_version,
                 "forge_version": forge_version,
