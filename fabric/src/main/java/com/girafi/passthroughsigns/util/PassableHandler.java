@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.girafi.passthroughsigns.util.ConfigurationHandler.*;
+import static com.girafi.passthroughsigns.util.ConfigurationHandler.GENERAL;
 
 public class PassableHandler {
 
