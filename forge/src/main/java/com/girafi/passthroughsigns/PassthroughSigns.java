@@ -2,7 +2,7 @@ package com.girafi.passthroughsigns;
 
 import com.girafi.passthroughsigns.api.PassthroughSignsAPI;
 import com.girafi.passthroughsigns.util.ConfigurationHandler;
-import net.minecraftforge.fml.ModLoadingContext;
+import fuzs.forgeconfigapiport.forge.api.neoforge.v4.NeoForgeConfigRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -13,7 +13,7 @@ public class PassthroughSigns {
 
     public PassthroughSigns() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::handleIMCMessages);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigurationHandler.spec);
+        NeoForgeConfigRegistry.INSTANCE.register(ModConfig.Type.COMMON, ConfigurationHandler.spec);
         CommonClass.init();
     }
 
