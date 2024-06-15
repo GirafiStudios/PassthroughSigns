@@ -4,7 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -16,11 +18,13 @@ public class PassableHelper {
             BlockState attachedState = level.getBlockState(posOffset);
 
             BlockState stateDown = level.getBlockState(pos.below());
-            BlockHitResult rayTrace = new BlockHitResult(new Vec3(posOffset.getX(), posOffset.getY(), posOffset.getZ()), facingOpposite, pos, false);
+            BlockHitResult rayTrace = new BlockHitResult(new Vec3(posOffset.getX(), posOffset.getY(), posOffset.getZ()), facingOpposite, posOffset, false);
             if (!level.isEmptyBlock(pos.below()) && attachedState.isAir()) {
-                stateDown.getBlock().use(stateDown, level, pos.below(), player, hand, rayTrace);
+                stateDown.useWithoutItem(level, player, rayTrace);
             } else if (!attachedState.isAir()) {
-                attachedState.getBlock().use(attachedState, level, posOffset, player, hand, rayTrace);
+                if (!level.isClientSide) {
+                    attachedState.useWithoutItem(level, player, rayTrace);
+                }
             }
         }
     }

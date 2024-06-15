@@ -20,7 +20,7 @@ public class PassthroughSignsAPI {
      * @param string the string of a blocks registry name or a entities class string
      */
     public static void setCanBePassed(String string) {
-        ResourceLocation resourceLocation = new ResourceLocation(string);
+        ResourceLocation resourceLocation = ResourceLocation.parse(string);
         if (BuiltInRegistries.ENTITY_TYPE.containsKey(resourceLocation)) {
             ENTITY_PASSABLES.add(BuiltInRegistries.ENTITY_TYPE.get(resourceLocation));
         } else if (BuiltInRegistries.BLOCK.containsKey(resourceLocation)) {
