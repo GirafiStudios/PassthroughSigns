@@ -17,7 +17,7 @@ public class PassthroughSignsAPI {
      * Can be used to make a block/entity based on its registry name from string passable
      * Example of use of intermod communication : InterModComms.sendTo("passthroughsigns", "registerPassable", "block/entity registry name");
      *
-     * @param string the string of a blocks registry name or a entities class string
+     * @param string the string of a blocks registry name or an entities class string
      */
     public static void setCanBePassed(String string) {
         ResourceLocation resourceLocation = ResourceLocation.parse(string);
@@ -38,7 +38,7 @@ public class PassthroughSignsAPI {
     }
 
     /**
-     * Convenience method for making a entity passable
+     * Convenience method for making an entity passable
      *
      * @param entityType the entity type
      **/
