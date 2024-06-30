@@ -22,7 +22,7 @@ public class ConfigurationHandler {
             shouldBannerBePassable = builder
                     .comment("Whether to ignore banners when attached to an interactable block or not.")
                     .translation("passthroughsigns.configgui.shouldBannerBePassable")
-                    .define("Ignore banners", false);
+                    .define("Ignore banners", true);
             shouldItemFrameBePassable = builder
                     .comment("Whether to ignore item frames when attached to an interactable block or not.")
                     .translation("passthroughsigns.configgui.shouldItemFrameBePassable")
@@ -30,7 +30,7 @@ public class ConfigurationHandler {
             shouldPaintingsBePassable = builder
                     .comment("Whether to ignore paintings when attached to an interactable block or not.")
                     .translation("passthroughsigns.configgui.shouldPaintingsBePassable")
-                    .define("Ignore paintings", false);
+                    .define("Ignore paintings", true);
             turnOffItemRotation = builder
                     .comment("Disable default behaviour of item frames rotation display, when not sneaking (Recommended when ignoring item frames is enabled)")
                     .translation("passthroughsigns.configgui.turnOffItemRotation")
