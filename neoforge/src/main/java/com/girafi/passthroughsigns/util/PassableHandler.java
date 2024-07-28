@@ -9,6 +9,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,9 +30,10 @@ public class PassableHandler {
         BlockState state = level.getBlockState(pos);
         Player player = event.getEntity();
         Block block = state.getBlock();
-        if (block instanceof WallSignBlock && GENERAL.shouldWallSignBePassable.get() || block instanceof WallBannerBlock && GENERAL.shouldBannerBePassable.get() ||
+        ItemStack heldStack = player.getMainHandItem();
+        if ((block instanceof WallSignBlock && GENERAL.shouldWallSignBePassable.get() || block instanceof WallBannerBlock && GENERAL.shouldBannerBePassable.get() ||
                 block instanceof IPassable && ((IPassable) block).canBePassed(level, pos, IPassable.EnumPassableType.WALL_BLOCK) ||
-                PassthroughSignsAPI.BLOCK_PASSABLES.contains(block)) {
+                PassthroughSignsAPI.BLOCK_PASSABLES.contains(block)) && !(heldStack.getItem() instanceof DyeItem)) {
             Direction facingOpposite = Direction.NORTH.getOpposite();
             if (state.hasProperty(DirectionalBlock.FACING)) {
                 facingOpposite = state.getValue(DirectionalBlock.FACING).getOpposite();
