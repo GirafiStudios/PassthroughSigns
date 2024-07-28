@@ -21,6 +21,6 @@ public abstract class MixinPlayer {
         BlockPos pos = entity.blockPosition();
         Player player = (Player) (Object) this; //Weird workaround, seems to work though
 
-        PassableHandler.onEntityInteract(level, pos, player, entity, hand, info);
+        PassableHandler.onEntityInteract(level, pos, player, entity, info);
     }
 }
