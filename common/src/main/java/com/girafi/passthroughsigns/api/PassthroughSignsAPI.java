@@ -22,9 +22,9 @@ public class PassthroughSignsAPI {
     public static void setCanBePassed(String string) {
         ResourceLocation resourceLocation = ResourceLocation.parse(string);
         if (BuiltInRegistries.ENTITY_TYPE.containsKey(resourceLocation)) {
-            ENTITY_PASSABLES.add(BuiltInRegistries.ENTITY_TYPE.get(resourceLocation));
+            ENTITY_PASSABLES.add(BuiltInRegistries.ENTITY_TYPE.getValue(resourceLocation));
         } else if (BuiltInRegistries.BLOCK.containsKey(resourceLocation)) {
-            BLOCK_PASSABLES.add(BuiltInRegistries.BLOCK.get(resourceLocation));
+            BLOCK_PASSABLES.add(BuiltInRegistries.BLOCK.getValue(resourceLocation));
         }
     }
 
