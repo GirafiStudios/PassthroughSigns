@@ -125,8 +125,10 @@ publishing {
         }
     }
     repositories {
-        maven {
-            url System.getenv('local_maven_url')
+        if (project.hasProperty('maven_repo')) {
+            maven { url maven_repo }
+        } else {
+            mavenLocal()
         }
     }
 }
