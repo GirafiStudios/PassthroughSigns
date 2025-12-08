@@ -1,13 +1,14 @@
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev'
+    id 'net.darkhax.curseforgegradle' version '1.1.+'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 base {
     archivesName = "${mod_name}-neoforge-${minecraft_version}"
 }
 
-version = "${version}${buildnumber}"
 
 // Automatically enable neoforge AccessTransformers if the file exists
 // This location is hardcoded in FML and can not be changed.
@@ -50,3 +51,37 @@ neoForge {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = System.getenv("curse_auth")
+
+    var mainFile = upload(251767, jar)
+    mainFile.changelogType = 'markdown'
+    mainFile.changelog = rootProject.findProperty('mod_changelog')
+    mainFile.addJavaVersion('Java 21')
+    mainFile.releaseType = 'release'
+    mainFile.addModLoader('NeoForge')
+    def vr = rootProject.parseVersionRange(minecraft_version_range)
+    mainFile.addGameVersion(*vr.quoted)
+}
+
+modrinth {
+    var changelogText = rootProject.findProperty('mod_changelog')
+
+    token = System.getenv("modrinth_auth")
+    projectId = "LJacrKXW"
+    changelog = changelogText
+    versionNumber = "${version}"
+    versionName = "${mod_name}-neoforge-${minecraft_version}-${version}"
+    versionType = "release"
+    loaders = ["neoforge"]
+    gameVersions = rootProject.parseVersionRange(minecraft_version_range).list
+    uploadFile = jar
+}

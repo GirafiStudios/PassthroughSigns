@@ -24,7 +24,7 @@ public class PassableHelper {
         if (!level.isEmptyBlock(pos.below()) && attachedState.isAir()) {
             stateDown.useWithoutItem(level, player, rayTrace);
         } else if (!attachedState.isAir()) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 attachedState.useWithoutItem(level, player, rayTrace);
             }
         }
