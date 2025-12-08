@@ -74,7 +74,7 @@ loom.remapConfigurations.configureEach {
 task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     apiToken = System.getenv("curse_auth")
 
-    var mainFile = upload(251767, tasks.remapJar)
+    var mainFile = upload(224633, tasks.remapJar)
     mainFile.changelogType = 'markdown'
     mainFile.changelog = rootProject.findProperty('mod_changelog')
     mainFile.addJavaVersion('Java 21')

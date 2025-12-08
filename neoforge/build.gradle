@@ -82,7 +82,7 @@ idea {
 task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     apiToken = System.getenv("curse_auth")
 
-    var mainFile = upload(251767, jar)
+    var mainFile = upload(224633, jar)
     mainFile.changelogType = 'markdown'
     mainFile.changelog = rootProject.findProperty('mod_changelog')
     mainFile.addJavaVersion('Java 21')
