@@ -1,7 +1,7 @@
 package com.girafi.passthroughsigns.api;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 
@@ -20,11 +20,11 @@ public class PassthroughSignsAPI {
      * @param string the string of a blocks registry name or an entities class string
      */
     public static void setCanBePassed(String string) {
-        ResourceLocation resourceLocation = ResourceLocation.parse(string);
-        if (BuiltInRegistries.ENTITY_TYPE.containsKey(resourceLocation)) {
-            ENTITY_PASSABLES.add(BuiltInRegistries.ENTITY_TYPE.getValue(resourceLocation));
-        } else if (BuiltInRegistries.BLOCK.containsKey(resourceLocation)) {
-            BLOCK_PASSABLES.add(BuiltInRegistries.BLOCK.getValue(resourceLocation));
+        Identifier identifier = Identifier.parse(string);
+        if (BuiltInRegistries.ENTITY_TYPE.containsKey(identifier)) {
+            ENTITY_PASSABLES.add(BuiltInRegistries.ENTITY_TYPE.getValue(identifier));
+        } else if (BuiltInRegistries.BLOCK.containsKey(identifier)) {
+            BLOCK_PASSABLES.add(BuiltInRegistries.BLOCK.getValue(identifier));
         }
     }
 
