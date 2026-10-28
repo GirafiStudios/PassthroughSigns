@@ -17,7 +17,7 @@ public class PassthroughSigns {
 
     public PassthroughSigns(ModContainer modContainer, IEventBus modBus) {
         modBus.addListener(this::handleIMCMessages);
-        modContainer.registerConfig(ModConfig.Type.COMMON, ConfigurationHandler.spec);
+        modContainer.registerConfig(ModConfig.Type.LOCAL, ConfigurationHandler.spec);
         CommonClass.init();
 
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
