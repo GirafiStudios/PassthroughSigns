@@ -52,7 +52,7 @@ public class PassableHandler {
             if (block instanceof WallSignBlock) {
                 if (!player.isCrouching()) {
                     PassableHelper.rightClick(level, pos, attachedState, player, rayTrace);
-                    if (attachedState.getBlock() instanceof BaseEntityBlock) {
+                    if (attachedState.getBlock() instanceof EntityBlock) {
                         event.setCanceled(true);
                     }
                 }
